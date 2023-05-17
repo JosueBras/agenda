@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/ContactListFragment">
+
+    <fragment
+        android:id="@+id/ContactListFragment"
+        android:name="br.univali.contacts.ContactListFragment"
+        android:label="@string/contact_list"
+        tools:layout="@layout/fragment_contact_list">
+
+        <action
+            android:id="@+id/action_from_contact_list_to_contact_details"
+            app:destination="@id/ContactDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ContactDetailsFragment"
+        android:name="br.univali.contacts.ContactDetailsFragment"
+        android:label="@string/contact_details"
+        tools:layout="@layout/fragment_contact_details">
+
+        <action
+            android:id="@+id/action_from_contact_details_to_contact_list"
+            app:destination="@id/ContactListFragment" />
+        <argument
+            android:name="contact"
+            app:argType="br.univali.contacts.Contact" />
+    </fragment>
+</navigation>
