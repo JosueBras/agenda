@@ -8,7 +8,7 @@ import android.widget.*
 
 class PhoneForm(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
     val editText get() = findViewById<EditText>(R.id.edit_text)!!
-    val delete get() = findViewById<Button>(R.id.delete_phone_number)!!
+    val delete get() = findViewById<View>(R.id.delete_phone_number)!!
     private val spinner get() = findViewById<Spinner>(R.id.phone_type)
     lateinit var viewModel: ContactDetailViewModel
     lateinit var type: PhoneType
