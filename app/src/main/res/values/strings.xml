@@ -7,4 +7,8 @@
     <string name="name">Nome</string>
     <string name="add_phone">adicionar telefone</string>
     <string name="delete_phone">Deletar</string>
+    <string-array name="phone_type">
+        <item>casa</item>
+        <item>trabalho</item>
+    </string-array>
 </resources>

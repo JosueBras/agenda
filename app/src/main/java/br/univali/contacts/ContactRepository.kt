@@ -7,16 +7,16 @@ class ContactRepository {
         return ContactDatabase.getInstance(context).contactDao().findAll()
     }
 
-    fun create(context: Context, name: String, phones: List<String>) {
+    fun create(context: Context, name: String, phones: List<PhoneDTO>) {
         val contact = Contact(name)
         ContactDatabase.getInstance(context).contactDao().add(contact)
         phones.forEach { phone ->
-            val number = PhoneNumber(contact, phone)
+            val number = PhoneNumber(contact, phone.number, phone.type)
             ContactDatabase.getInstance(context).contactDao().addPhoneNumber(number)
         }
     }
 
-    fun update(context: Context, id: Int, name: String, phones: List<String>) {}
+    fun update(context: Context, id: Int, name: String, phones: List<PhoneDTO>) {}
 
     fun deleteById(context: Context, id: Int) {}
 }

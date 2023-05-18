@@ -38,12 +38,15 @@ class ContactDetailsFragment : Fragment() {
         if (data != null) {
             binding.name.editText!!.setText(data!!.contact.name)
             binding.mainPhone.editText.setText(data!!.phones.firstOrNull()?.number)
+            binding.mainPhone.setPhoneType(PhoneType.values()[data!!.phones.firstOrNull()?.type ?: 0])
             data!!.phones.forEach { phone ->
-                binding.phones.addView(
-                    PhoneEditText(viewModel, context!!).apply {
-                        editText.setText(phone.number)
-                    }
-                )
+                if (data!!.phones.indexOf(phone) > 0) {
+                    binding.phones.addView(
+                        PhoneEditText(viewModel, context!!).apply {
+                            editText.setText(phone.number)
+                        }
+                    )
+                }
             }
         } else {
             binding.buttonDelete.visibility = View.GONE

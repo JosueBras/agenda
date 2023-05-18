@@ -2,13 +2,15 @@ package br.univali.contacts
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
-import android.widget.FrameLayout
+import android.widget.*
 
 class PhoneEditText(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
     val editText get() = findViewById<EditText>(R.id.edit_text)!!
+    private val spinner get() = findViewById<Spinner>(R.id.phone_type)
     lateinit var viewModel: ContactDetailViewModel
+    private lateinit var phoneType: PhoneType
 
     constructor(viewModel: ContactDetailViewModel, context: Context) : this(context) {
         this.viewModel = viewModel
@@ -18,8 +20,32 @@ class PhoneEditText(context: Context, attrs: AttributeSet? = null) : FrameLayout
         inflate(context, R.layout.edit_text_phone, this)
         editText.imeOptions = EditorInfo.IME_ACTION_DONE
         editText.setOnEditorActionListener { textView, actionId, event ->
-            viewModel.addPhone(textView.text.toString())
+            viewModel.addPhone(
+                PhoneDTO(
+                    number = textView.text.toString(),
+                    type = phoneType,
+                ),
+            )
             return@setOnEditorActionListener false
         }
+        setPhoneTypeSpinner()
+    }
+
+    private fun setPhoneTypeSpinner() {
+        val adapter = ArrayAdapter.createFromResource(context, R.array.phone_type, android.R.layout.simple_spinner_item)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
+                phoneType = PhoneType.values()[pos]
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+    }
+
+    fun setPhoneType(type: PhoneType) {
+        phoneType = type
+        spinner.setSelection(type.ordinal)
     }
 }

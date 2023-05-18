@@ -16,12 +16,16 @@ public class PhoneNumber implements Serializable {
     @ColumnInfo
     private String number;
 
+    @ColumnInfo
+    private int type;
+
     public PhoneNumber() {
     }
 
-    public PhoneNumber(Contact contact, String number) {
+    public PhoneNumber(Contact contact, String number, PhoneType type) {
         this.contactId = contact.getId();
         this.number = number;
+        this.type = type.ordinal();
     }
 
     public int getId() {
@@ -46,5 +50,13 @@ public class PhoneNumber implements Serializable {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

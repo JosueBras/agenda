@@ -10,9 +10,9 @@ class ContactDetailViewModel : ViewModel() {
     var id = 0
     var name: String = ""
     private val repository = ContactRepository()
-    private val phones = mutableListOf<String>()
+    private val phones = mutableListOf<PhoneDTO>()
 
-    fun addPhone(phone: String) {
+    fun addPhone(phone: PhoneDTO) {
         phones.add(phone)
     }
 
