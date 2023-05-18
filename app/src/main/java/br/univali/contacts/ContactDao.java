@@ -27,9 +27,6 @@ public interface ContactDao {
     @Update(entity = Contact.class)
     void update(Contact contact);
 
-    @Update(entity = PhoneNumber.class)
-    void updatePhoneNumber(PhoneNumber number);
-
     @Delete
     void delete(Contact contact);
 

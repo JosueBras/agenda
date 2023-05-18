@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.forEach
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation.findNavController
@@ -13,6 +15,7 @@ import br.univali.contacts.databinding.FragmentContactDetailsBinding
 class ContactDetailsFragment : Fragment() {
     private lateinit var binding: FragmentContactDetailsBinding
     private lateinit var viewModel: ContactDetailViewModel
+    private var isEditingMode = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this)[ContactDetailViewModel::class.java]
@@ -25,14 +28,20 @@ class ContactDetailsFragment : Fragment() {
         binding.buttonSave.setOnClickListener {
             if (validate()) {
                 viewModel.name = binding.name.editText!!.text.toString()
-                viewModel.add(context!!)
+                viewModel.phones.clear()
+                viewModel.phones.addAll(getPhones())
+                if (isEditingMode) {
+                    viewModel.update(context!!)
+                } else {
+                    viewModel.add(context!!)
+                }
                 findNavController(it).navigate(R.id.action_from_contact_details_to_contact_list)
             } else {
                 Toast.makeText(context!!, R.string.invalid_phone, Toast.LENGTH_SHORT).show()
             }
         }
         binding.buttonAddPhone.setOnClickListener {
-            binding.phones.addView(PhoneEditText(viewModel, context!!))
+            binding.phones.addView(PhoneForm(viewModel, context!!))
         }
         binding.mainPhone.delete.visibility = View.GONE
         binding.buttonDelete.setOnClickListener {
@@ -44,7 +53,7 @@ class ContactDetailsFragment : Fragment() {
 
     private fun validate(): Boolean {
         fun isValidPhones(): Boolean {
-            for (phone in viewModel.phones) {
+            for (phone in getPhones()) {
                 if (phone.number.isBlank()) {
                     return false
                 }
@@ -54,9 +63,25 @@ class ContactDetailsFragment : Fragment() {
         return binding.name.editText!!.text.isNotBlank() && isValidPhones()
     }
 
+    private fun getPhones(): List<PhoneDTO> {
+        val phones = mutableListOf<PhoneDTO>()
+        binding.phones.forEach {
+            if (it is PhoneForm && it.isVisible) {
+                phones.add(
+                    PhoneDTO(
+                        number = it.editText.text.toString(),
+                        type = it.type,
+                    ),
+                )
+            }
+        }
+        return phones
+    }
+
     private fun fillForm() {
         val data = requireArguments().getSerializable("contact") as ContactWithPhoneNumber?
         if (data != null) {
+            isEditingMode = true
             viewModel.id = data.contact.id
             binding.name.editText!!.setText(data.contact.name)
             val mainPhone = data.phones.firstOrNull()
@@ -74,7 +99,7 @@ class ContactDetailsFragment : Fragment() {
             data.phones.forEach { phone ->
                 if (data.phones.indexOf(phone) > 0) {
                     binding.phones.addView(
-                        PhoneEditText(viewModel, context!!).apply {
+                        PhoneForm(viewModel, context!!).apply {
                             editText.setText(phone.number)
                         }.apply {
                             setPhoneDTO(

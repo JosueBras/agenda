@@ -18,7 +18,21 @@ class ContactRepository {
         }
     }
 
-    fun update(context: Context, id: String, name: String, phones: List<PhoneDTO>) {}
+    fun update(context: Context, id: String, name: String, phones: List<PhoneDTO>) {
+        val result = getDao(context).findById(id)
+        result.phones.forEach { getDao(context).deletePhoneNumber(it) }
+        phones.forEach {
+            getDao(context).addPhoneNumber(
+                PhoneNumber(
+                    result.contact,
+                    it.number,
+                    it.type,
+                ),
+            )
+        }
+        result.contact.name = name
+        getDao(context).update(result.contact)
+    }
 
     fun deletePhone(context: Context, phoneDTO: PhoneDTO) {
         val number = getDao(context).findPhoneNumberById(phoneDTO.id!!)

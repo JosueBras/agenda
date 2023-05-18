@@ -6,12 +6,12 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.*
 
-class PhoneEditText(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
+class PhoneForm(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
     val editText get() = findViewById<EditText>(R.id.edit_text)!!
     val delete get() = findViewById<Button>(R.id.delete_phone_number)!!
     private val spinner get() = findViewById<Spinner>(R.id.phone_type)
     lateinit var viewModel: ContactDetailViewModel
-    private lateinit var phoneType: PhoneType
+    lateinit var type: PhoneType
     private lateinit var phoneDTO: PhoneDTO
 
     constructor(viewModel: ContactDetailViewModel, context: Context) : this(context) {
@@ -21,24 +21,18 @@ class PhoneEditText(context: Context, attrs: AttributeSet? = null) : FrameLayout
     init {
         inflate(context, R.layout.edit_text_phone, this)
         editText.imeOptions = EditorInfo.IME_ACTION_DONE
-        editText.setOnEditorActionListener { textView, actionId, event ->
-            viewModel.phones.add(
-                PhoneDTO(
-                    number = textView.text.toString(),
-                    type = phoneType,
-                ),
-            )
-            return@setOnEditorActionListener false
-        }
         setPhoneTypeSpinner()
         delete.setOnClickListener {
-            viewModel.deletePhone(context, phoneDTO)
+            if (::phoneDTO.isInitialized) {
+                viewModel.deletePhone(context, phoneDTO)
+            }
             visibility = GONE
         }
     }
 
     fun setPhoneDTO(dto: PhoneDTO) {
         phoneDTO = dto
+        spinner.setSelection(dto.type.ordinal)
     }
 
     private fun setPhoneTypeSpinner() {
@@ -47,7 +41,7 @@ class PhoneEditText(context: Context, attrs: AttributeSet? = null) : FrameLayout
         spinner.adapter = adapter
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-                phoneType = PhoneType.values()[pos]
+                type = PhoneType.values()[pos]
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {}
@@ -55,7 +49,7 @@ class PhoneEditText(context: Context, attrs: AttributeSet? = null) : FrameLayout
     }
 
     fun setPhoneType(type: PhoneType) {
-        phoneType = type
+        this.type = type
         spinner.setSelection(type.ordinal)
     }
 }
