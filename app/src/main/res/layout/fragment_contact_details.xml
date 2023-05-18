@@ -37,10 +37,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginTop="12dp">
-            <br.univali.contacts.PhoneForm
-                    android:id="@+id/main_phone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
             <Button
                     android:text="@string/add_phone"
                     android:layout_width="match_parent"
@@ -48,6 +44,10 @@
                     android:id="@+id/button_add_phone"
                     android:layout_marginHorizontal="16dp"
             />
+            <br.univali.contacts.PhoneForm
+                    android:id="@+id/main_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
         </LinearLayout>
     </ScrollView>
 

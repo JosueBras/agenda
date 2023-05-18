@@ -43,7 +43,6 @@ class ContactDetailsFragment : Fragment() {
         binding.buttonAddPhone.setOnClickListener {
             binding.phones.addView(PhoneForm(viewModel, context!!))
         }
-        binding.mainPhone.delete.visibility = View.GONE
         binding.buttonDelete.setOnClickListener {
             viewModel.delete(context!!)
             findNavController(it).navigate(R.id.action_from_contact_details_to_contact_list)
@@ -52,6 +51,7 @@ class ContactDetailsFragment : Fragment() {
     }
 
     private fun validate(): Boolean {
+        if (getPhones().isEmpty()) return false
         fun isValidPhones(): Boolean {
             for (phone in getPhones()) {
                 if (phone.number.isBlank()) {
