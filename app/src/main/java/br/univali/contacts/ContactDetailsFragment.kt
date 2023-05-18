@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation.findNavController
@@ -22,9 +23,13 @@ class ContactDetailsFragment : Fragment() {
         binding.mainPhone.viewModel = viewModel
         fillForm()
         binding.buttonSave.setOnClickListener {
-            viewModel.name = binding.name.editText!!.text.toString()
-            viewModel.add(context!!)
-            findNavController(it).navigate(R.id.action_from_contact_details_to_contact_list)
+            if (validate()) {
+                viewModel.name = binding.name.editText!!.text.toString()
+                viewModel.add(context!!)
+                findNavController(it).navigate(R.id.action_from_contact_details_to_contact_list)
+            } else {
+                Toast.makeText(context!!, R.string.invalid_phone, Toast.LENGTH_SHORT).show()
+            }
         }
         binding.buttonAddPhone.setOnClickListener {
             binding.phones.addView(PhoneEditText(viewModel, context!!))
@@ -35,6 +40,18 @@ class ContactDetailsFragment : Fragment() {
             findNavController(it).navigate(R.id.action_from_contact_details_to_contact_list)
         }
         return binding.root
+    }
+
+    private fun validate(): Boolean {
+        fun isValidPhones(): Boolean {
+            for (phone in viewModel.phones) {
+                if (phone.number.isBlank()) {
+                    return false
+                }
+            }
+            return true
+        }
+        return binding.name.editText!!.text.isNotBlank() && isValidPhones()
     }
 
     private fun fillForm() {

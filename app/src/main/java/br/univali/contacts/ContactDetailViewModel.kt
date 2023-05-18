@@ -10,11 +10,7 @@ class ContactDetailViewModel : ViewModel() {
     var id = ""
     var name: String = ""
     private val repository = ContactRepository()
-    private val phones = mutableListOf<PhoneDTO>()
-
-    fun addPhone(phone: PhoneDTO) {
-        phones.add(phone)
-    }
+    val phones = mutableListOf<PhoneDTO>()
 
     fun deletePhone(context: Context, phone: PhoneDTO) {
         viewModelScope.launch(Dispatchers.IO) {

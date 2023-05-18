@@ -22,7 +22,7 @@ class PhoneEditText(context: Context, attrs: AttributeSet? = null) : FrameLayout
         inflate(context, R.layout.edit_text_phone, this)
         editText.imeOptions = EditorInfo.IME_ACTION_DONE
         editText.setOnEditorActionListener { textView, actionId, event ->
-            viewModel.addPhone(
+            viewModel.phones.add(
                 PhoneDTO(
                     number = textView.text.toString(),
                     type = phoneType,

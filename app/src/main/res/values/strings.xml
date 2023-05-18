@@ -7,6 +7,7 @@
     <string name="delete_phone_number">Apagar telefone</string>
     <string name="name">Nome</string>
     <string name="add_phone">adicionar telefone</string>
+    <string name="invalid_phone">Preencha os campos corretamente</string>
     <string name="delete_phone">Deletar</string>
     <string-array name="phone_type">
         <item>casa</item>
