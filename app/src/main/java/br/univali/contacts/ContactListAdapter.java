@@ -11,13 +11,14 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+import java.util.Optional;
 
 import static br.univali.contacts.ContactListAdapter.ViewHolder;
 
 public class ContactListAdapter extends RecyclerView.Adapter<ViewHolder> {
-    private final List<Contact> contacts;
+    private final List<ContactWithPhoneNumber> contacts;
 
-    public ContactListAdapter(List<Contact> contacts) {
+    public ContactListAdapter(List<ContactWithPhoneNumber> contacts) {
         contacts.sort(new Contact.Comparator());
         this.contacts = contacts;
     }
@@ -33,8 +34,9 @@ public class ContactListAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.name.setText(contacts.get(position).getName());
-        holder.phone.setText(contacts.get(position).getPhone());
+        holder.name.setText(contacts.get(position).getContact().getName());
+        Optional<PhoneNumber> phone = contacts.get(position).getPhones().stream().findFirst();
+        phone.ifPresent(number -> holder.phone.setText(number.getNumber()));
         holder.listTile.setOnClickListener(view -> {
             Bundle bundle = new Bundle();
             bundle.putSerializable("contact", contacts.get(position));
@@ -50,9 +52,9 @@ public class ContactListAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        private LinearLayout listTile;
-        private TextView name;
-        private TextView phone;
+        private final LinearLayout listTile;
+        private final TextView name;
+        private final TextView phone;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

@@ -1,37 +1,32 @@
 package br.univali.contacts;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 @Entity
 public class Contact implements Serializable {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    @PrimaryKey
+    @NonNull
+    private String id;
 
     @ColumnInfo
     private String name;
 
-    @ColumnInfo
-    private String phone;
-
-    public Contact() {
-
-    }
-
-    public Contact(int id, String name, String phone) {
-        this.id = id;
+    public Contact(String name) {
+        this.id = UUID.randomUUID().toString();
         this.name = name;
-        this.phone = phone;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -43,18 +38,10 @@ public class Contact implements Serializable {
         this.name = name;
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public static class Comparator implements java.util.Comparator<Contact> {
+    public static class Comparator implements java.util.Comparator<ContactWithPhoneNumber> {
         @Override
-        public int compare(Contact a, Contact b) {
-            return a.name.compareTo(b.name);
+        public int compare(ContactWithPhoneNumber a, ContactWithPhoneNumber b) {
+            return a.getContact().name.compareTo(b.getContact().name);
         }
     }
 }
