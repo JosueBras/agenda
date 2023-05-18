@@ -8,9 +8,11 @@ import android.widget.*
 
 class PhoneEditText(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
     val editText get() = findViewById<EditText>(R.id.edit_text)!!
+    val delete get() = findViewById<Button>(R.id.delete_phone_number)!!
     private val spinner get() = findViewById<Spinner>(R.id.phone_type)
     lateinit var viewModel: ContactDetailViewModel
     private lateinit var phoneType: PhoneType
+    private lateinit var phoneDTO: PhoneDTO
 
     constructor(viewModel: ContactDetailViewModel, context: Context) : this(context) {
         this.viewModel = viewModel
@@ -29,6 +31,14 @@ class PhoneEditText(context: Context, attrs: AttributeSet? = null) : FrameLayout
             return@setOnEditorActionListener false
         }
         setPhoneTypeSpinner()
+        delete.setOnClickListener {
+            viewModel.deletePhone(context, phoneDTO)
+            visibility = GONE
+        }
+    }
+
+    fun setPhoneDTO(dto: PhoneDTO) {
+        phoneDTO = dto
     }
 
     private fun setPhoneTypeSpinner() {

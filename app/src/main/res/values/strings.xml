@@ -4,6 +4,7 @@
     <string name="contact_details">Detalhes do contato</string>
     <string name="phone">Telefone</string>
     <string name="save_phone">SALVAR</string>
+    <string name="delete_phone_number">Apagar telefone</string>
     <string name="name">Nome</string>
     <string name="add_phone">adicionar telefone</string>
     <string name="delete_phone">Deletar</string>

@@ -7,13 +7,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ContactDetailViewModel : ViewModel() {
-    var id = 0
+    var id = ""
     var name: String = ""
     private val repository = ContactRepository()
     private val phones = mutableListOf<PhoneDTO>()
 
     fun addPhone(phone: PhoneDTO) {
         phones.add(phone)
+    }
+
+    fun deletePhone(context: Context, phone: PhoneDTO) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deletePhone(context, phone)
+        }
     }
 
     fun add(context: Context) {

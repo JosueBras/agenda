@@ -3,20 +3,30 @@ package br.univali.contacts
 import android.content.Context
 
 class ContactRepository {
+    private fun getDao(context: Context) = ContactDatabase.getInstance(context).contactDao()
+
     fun findAll(context: Context): List<ContactWithPhoneNumber> {
-        return ContactDatabase.getInstance(context).contactDao().findAll()
+        return getDao(context).findAll()
     }
 
     fun create(context: Context, name: String, phones: List<PhoneDTO>) {
         val contact = Contact(name)
-        ContactDatabase.getInstance(context).contactDao().add(contact)
+        getDao(context).add(contact)
         phones.forEach { phone ->
             val number = PhoneNumber(contact, phone.number, phone.type)
-            ContactDatabase.getInstance(context).contactDao().addPhoneNumber(number)
+            getDao(context).addPhoneNumber(number)
         }
     }
 
-    fun update(context: Context, id: Int, name: String, phones: List<PhoneDTO>) {}
+    fun update(context: Context, id: String, name: String, phones: List<PhoneDTO>) {}
 
-    fun deleteById(context: Context, id: Int) {}
+    fun deletePhone(context: Context, phoneDTO: PhoneDTO) {
+        val number = getDao(context).findPhoneNumberById(phoneDTO.id!!)
+        getDao(context).deletePhoneNumber(number)
+    }
+
+    fun deleteById(context: Context, id: String) {
+        val result = getDao(context).findById(id)
+        getDao(context).delete(result.contact)
+    }
 }

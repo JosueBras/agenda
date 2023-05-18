@@ -10,6 +10,14 @@ public interface ContactDao {
     @Query("SELECT * FROM Contact")
     List<ContactWithPhoneNumber> findAll();
 
+    @Transaction
+    @Query("SELECT * FROM Contact WHERE id = :id")
+    ContactWithPhoneNumber findById(String id);
+
+    @Transaction
+    @Query("SELECT * from PhoneNumber WHERE id = :id")
+    PhoneNumber findPhoneNumberById(int id);
+
     @Insert
     void add(Contact contact);
 
