@@ -13,6 +13,7 @@ class PhoneForm(context: Context, attrs: AttributeSet? = null) : FrameLayout(con
     lateinit var viewModel: ContactDetailViewModel
     lateinit var type: PhoneType
     private lateinit var phoneDTO: PhoneDTO
+    lateinit var fragment: ContactDetailsFragment
 
     constructor(viewModel: ContactDetailViewModel, context: Context) : this(context) {
         this.viewModel = viewModel
@@ -23,7 +24,7 @@ class PhoneForm(context: Context, attrs: AttributeSet? = null) : FrameLayout(con
         editText.imeOptions = EditorInfo.IME_ACTION_DONE
         setPhoneTypeSpinner()
         delete.setOnClickListener {
-            if (::phoneDTO.isInitialized) {
+            if (::phoneDTO.isInitialized && fragment.getPhones().size > 1) {
                 viewModel.deletePhone(context, phoneDTO)
             }
             visibility = GONE

@@ -24,6 +24,7 @@ class ContactDetailsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentContactDetailsBinding.inflate(inflater, container, false)
         binding.mainPhone.viewModel = viewModel
+        binding.mainPhone.fragment = this
         fillForm()
         binding.buttonSave.setOnClickListener {
             if (validate()) {
@@ -63,10 +64,11 @@ class ContactDetailsFragment : Fragment() {
         return binding.name.editText!!.text.isNotBlank() && isValidPhones()
     }
 
-    private fun getPhones(): List<PhoneDTO> {
+    fun getPhones(): List<PhoneDTO> {
         val phones = mutableListOf<PhoneDTO>()
         binding.phones.forEach {
             if (it is PhoneForm && it.isVisible) {
+                it.fragment = this
                 phones.add(
                     PhoneDTO(
                         number = it.editText.text.toString(),
